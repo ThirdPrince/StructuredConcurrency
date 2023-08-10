@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 并发下载10个User
  * 然后并发下载10个头像
- * Java 
+ * Java
  */
 public class UserDownload {
 

@@ -1,6 +1,8 @@
 package kt
 
 import kotlinx.coroutines.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 /**
@@ -17,8 +19,7 @@ fun main() = runBlocking {
     var count = userIds.size
     val deferredResults = userIds.map { userId ->
         async {
-            println("async-->${Thread.currentThread().name}")
-            getUser(userId)
+            getUser2(userId)
         }
     }
 
@@ -32,7 +33,6 @@ fun main() = runBlocking {
     println("get User over-->$results")
     val deferredAvatar = results.map { user ->
         async {
-            println("async-->${Thread.currentThread().name}")
             getUserAvatar(user)
         }
     }
@@ -53,6 +53,16 @@ suspend fun getUser(userId: Int): User = withContext(Dispatchers.IO){
     val sleepTime = java.util.Random().nextInt(2000)
     delay(sleepTime.toLong())
     return@withContext User(sleepTime.toString() + "", "avatar", "")
+}
+
+/**
+ * 异步同步化
+ */
+suspend fun getUser2(userId: Int): User = suspendCoroutine {
+    continuation ->
+    HttpManager.getUser(userId) {
+        continuation.resume(it)
+    }
 }
 
 

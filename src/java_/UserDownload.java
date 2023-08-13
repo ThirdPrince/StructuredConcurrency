@@ -1,6 +1,9 @@
 package java_;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import kotlin.reflect.KVariance;
+import kt.HttpManager;
 import kt.User;
 
 import java.util.ArrayList;
@@ -30,15 +33,12 @@ public class UserDownload {
         AtomicInteger atomicInteger  = new AtomicInteger(userId.size());
         CountDownLatch countDownLatch = new CountDownLatch(userId.size());
         for (Integer id : userId) {
-            executor.execute(() -> {
-                try {
-                    users.add(getUser(id));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            HttpUtils.getUser(id, user -> {
+                users.add(user);
                 System.out.println("atomicInteger-->"+  atomicInteger.decrementAndGet());
                 countDownLatch.countDown();
             });
+
         }
         countDownLatch.await();
         System.out.println("atomicInteger-->"+atomicInteger.get());

@@ -26,14 +26,17 @@ fun main() = runBlocking{
                 }
             }
             println(deferredResults::class.simpleName)
+            deferredResults.forEach {
+
+            }
             val resultMap = deferredResults.map { deferred ->
                 val (userId, localPath) = deferred.await()
                 log("userId -->$userId 结束")
                 userId to localPath
-            }
+            }.toMap()
             log("全部 结束")
             resultMap.forEach {
-                println("${it.first}"+":${it.second}")
+                println("${it.key}"+":${it.value}")
             }
 
             // Now you have a map where keys are User IDs and values are local file paths

@@ -22,13 +22,12 @@ fun main() = runBlocking{
                 async {
                     log("userId -->$userId 开始")
                     val localPath = downloadPortraitPhoto(fileId)
+                    log("----$localPath")
                     userId to localPath
                 }
             }
             println(deferredResults::class.simpleName)
-            deferredResults.forEach {
 
-            }
             val resultMap = deferredResults.map { deferred ->
                 val (userId, localPath) = deferred.await()
                 log("userId -->$userId 结束")
@@ -38,9 +37,6 @@ fun main() = runBlocking{
             resultMap.forEach {
                 println("${it.key}"+":${it.value}")
             }
-
-            // Now you have a map where keys are User IDs and values are local file paths
-            // You can use resultMap to associate User IDs with their corresponding local file paths
         }
     }
 

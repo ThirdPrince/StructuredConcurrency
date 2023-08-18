@@ -25,7 +25,7 @@ fun main() = runBlocking {
     val map: MutableMap<Int, User> = HashMap()
     val deferredResults = userIds.map { userId ->
         async {
-            val user = getUserAsync(userId)
+            val user = getUserAsync2(userId)
             log("userId-->$userId :::: user --->  $user")
             map[userId] = user
             map
@@ -44,7 +44,7 @@ fun main() = runBlocking {
     log("map -->${map.size}")
     val deferredAvatar = map.map { map ->
         async {
-            getUserAvatarAsync(map.value)
+            getUserAvatarAsync2(map.value)
         }
     }
 
@@ -64,19 +64,18 @@ fun main() = runBlocking {
 /**
  * 异步同步化
  */
-suspend fun getUserAsync(userId: Int): User = withContext(HttpManager.customDispatchers){
-    val sleepTime = java.util.Random().nextInt(500)
-    log("getUserAsync sleepTime -->$sleepTime")
-    delay(sleepTime.toLong())
-    User(userId,sleepTime.toString(), "avatar", "")
+suspend fun getUserAsync2(userId: Int): User = suspendCoroutine{
+    continuation->
+    HttpManager.getUser(userId){
+        continuation.resume(it)
+    }
 }
 
 
 
-suspend fun getUserAvatarAsync(user: User): User = withContext(HttpManager.customDispatchers) {
-    val sleepTime = java.util.Random().nextInt(1000)
-    log("getUserAvatarAsync sleepTime -->$sleepTime")
-    delay(sleepTime.toLong())
-    user.file = "$sleepTime.png"
-    return@withContext user
+suspend fun getUserAvatarAsync2(user: User): User = suspendCoroutine {
+        continuation->
+    HttpManager.getUserAvatar(user){
+        continuation.resume(it)
+    }
 }

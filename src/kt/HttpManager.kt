@@ -16,6 +16,7 @@ object HttpManager {
     fun getUser(userId:Int,callback:(User)->Unit){
         executor.execute {
             val sleepTime = Random().nextInt(500)
+            Thread.sleep(sleepTime.toLong())
             callback(User(userId,sleepTime.toString(), "avatar", ""))
         }
     }

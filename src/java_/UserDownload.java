@@ -6,10 +6,8 @@ import kotlin.reflect.KVariance;
 import kt.HttpManager;
 import kt.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -25,17 +23,18 @@ public class UserDownload {
     public static void main(String[] args) throws InterruptedException {
 
         long  startTime = System.currentTimeMillis();
-        Executor executor = Executors.newFixedThreadPool(10);
-        List<Integer> userId = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
-        List<User> users = new ArrayList<>();
-
+        Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        List<Integer> userId = new ArrayList<>();
+        for (int i = 1; i <= 1000; i++) {
+            userId.add(i);
+        }
+        Map<Integer,User> map = new ConcurrentHashMap<>();
         System.out.println("开始下载user");
         AtomicInteger atomicInteger  = new AtomicInteger(userId.size());
         CountDownLatch countDownLatch = new CountDownLatch(userId.size());
         for (Integer id : userId) {
             HttpUtils.getUser(id, user -> {
-                users.add(user);
-                System.out.println("atomicInteger-->"+  atomicInteger.decrementAndGet());
+                map.put(id,user);
                 countDownLatch.countDown();
             });
 
@@ -46,8 +45,9 @@ public class UserDownload {
 
         AtomicInteger atomicIntegerAvatar  = new AtomicInteger(userId.size());
         CountDownLatch countDownLatchDownload= new CountDownLatch(userId.size());
-
-        for (User user : users){
+        System.out.println("map size-->"+map.size());
+        for (User user : map.values()){
+            //System.out.println("---"+user);
             executor.execute(() -> {
                 try {
                    getUserAvatar(user);
@@ -61,20 +61,15 @@ public class UserDownload {
         }
         countDownLatchDownload.await();
         long costTime = (System.currentTimeMillis() -startTime)/1000;
-        System.out.println(users.toString());
+        System.out.println(map.toString());
         System.out.println("costTime -->"+costTime);
 
 
     }
 
-    public static User getUser(int userId) throws InterruptedException {
-        int sleepTime = new Random().nextInt(2000);
-        Thread.sleep(sleepTime);
-        return new User(sleepTime + "", "avatar","");
-    }
 
     public static User getUserAvatar(User user) throws InterruptedException {
-        int sleepTime = new Random().nextInt(5000);
+        int sleepTime = new Random().nextInt(1000);
         Thread.sleep(sleepTime);
         user.setFile(sleepTime + ".png");
         return user;

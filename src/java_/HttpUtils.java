@@ -11,8 +11,8 @@ public class HttpUtils {
 
     public static  void getUser(int userId,UserCallback userCallback){
         executorService.execute(() -> {
-           long  sleepTime  = new Random().nextInt(2000);
-            userCallback.onCallback(new User(sleepTime+"", "avatar", ""));
+           long  sleepTime  = new Random().nextInt(500);
+            userCallback.onCallback(new User(userId,sleepTime+"", "avatar", ""));
         });
 
     }

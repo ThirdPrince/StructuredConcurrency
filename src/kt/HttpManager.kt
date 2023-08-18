@@ -13,8 +13,8 @@ object HttpManager {
 
     fun getUser(userId:Int,callback:(User)->Unit){
         executor.execute {
-            val sleepTime = Random().nextInt(2000)
-            callback(User(sleepTime.toString(), "avatar", ""))
+            val sleepTime = Random().nextInt(500)
+            callback(User(userId,sleepTime.toString(), "avatar", ""))
         }
     }
 }

@@ -1,9 +1,10 @@
 package kt
 
 import kotlinx.coroutines.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.math.log
 
 
 /**
@@ -14,15 +15,26 @@ import kotlin.math.log
 fun main() = runBlocking {
 
 
+    val dispatcherCustom = Executors.newFixedThreadPool(100).asCoroutineDispatcher()
     val startTime = System.currentTimeMillis()
-    val userIds = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-
+    //val userIds = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    //List<Integer> userId = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+    val userIds: MutableList<Int> = ArrayList()
+    for (i in 1..1000) {
+        userIds.add(i)
+    }
+    //val userList = mutableListOf<User>()
     var count = userIds.size
+
+    val map: MutableMap<Int, User> = HashMap()
     val deferredResults = userIds.map { userId ->
-        async {
-            getUser2(userId)
+        async(dispatcherCustom) {
+            val user = getUser2(userId)
+            map[userId] = user
+            map
         }
     }
+
 
     // 获取每个 async 任务的结果
     val results = deferredResults.map { deferred ->
@@ -31,12 +43,15 @@ fun main() = runBlocking {
         deferred.await()
 
     }
-    println("get User over-->$results")
-    val deferredAvatar = results.map { user ->
-        async {
-            getUserAvatar(user)
+
+    println("map -->${map.size}")
+    val deferredAvatar = map.map { map ->
+        async(dispatcherCustom) {
+            getUserAvatar(map.value)
         }
     }
+
+
     var countAvatar = results.size
     val resultAvatar = deferredAvatar.map { deferred ->
         countAvatar--
@@ -44,31 +59,24 @@ fun main() = runBlocking {
         deferred.await()
 
     }
-    val costTime = (System.currentTimeMillis()-startTime)/1000
+    val costTime = (System.currentTimeMillis() - startTime) / 1000
     println("costTime-->$costTime")
-    println(resultAvatar.toString())
+    // println(resultAvatar.toString())
 }
 
-
-suspend fun getUser(userId: Int): User = withContext(Dispatchers.IO){
-    val sleepTime = java.util.Random().nextInt(2000)
-    delay(sleepTime.toLong())
-    return@withContext User(sleepTime.toString() + "", "avatar", "")
-}
 
 /**
  * 异步同步化
  */
-suspend fun getUser2(userId: Int): User = suspendCoroutine {
-    continuation ->
+suspend fun getUser2(userId: Int): User = suspendCoroutine { continuation ->
     HttpManager.getUser(userId) {
         continuation.resume(it)
     }
 }
 
 
-suspend fun getUserAvatar(user: User): User= withContext(Dispatchers.IO) {
-    val sleepTime = java.util.Random().nextInt(5000)
+suspend fun getUserAvatar(user: User): User = withContext(Dispatchers.IO) {
+    val sleepTime = java.util.Random().nextInt(1000)
     delay(sleepTime.toLong())
     user.file = "$sleepTime.png"
     return@withContext user

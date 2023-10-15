@@ -10,19 +10,24 @@ import java.util.concurrent.Executors
  */
 object HttpManager {
 
-     var executor: Executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()*2)
-     val customDispatchers = executor.asCoroutineDispatcher()
+    var executor: Executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2)
+    val customDispatchers = executor.asCoroutineDispatcher()
 
-    fun getUser(userId:Int,callback:(User)->Unit){
+    /**
+     * getUser
+     */
+    fun getUser(userId: Int, callback: (User) -> Unit) {
         executor.execute {
             val sleepTime = Random().nextInt(500)
             Thread.sleep(sleepTime.toLong())
-            callback(User(userId,sleepTime.toString(), "avatar", ""))
+            callback(User(userId, sleepTime.toString(), "avatar", ""))
         }
     }
 
-
-    fun getUserAvatar(user: User, callback:(User)->Unit) {
+    /**
+     * getAvatar
+     */
+    fun getUserAvatar(user: User, callback: (User) -> Unit) {
         executor.execute {
             val sleepTime = Random().nextInt(1000)
             try {

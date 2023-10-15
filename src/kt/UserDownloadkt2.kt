@@ -18,7 +18,7 @@ fun main() = runBlocking {
 
     val startTime = System.currentTimeMillis()
     val userIds: MutableList<Int> = ArrayList()
-    for (i in 1..1000) {
+    for (i in 1..100) {
         userIds.add(i)
     }
     var count = userIds.size
@@ -56,8 +56,10 @@ fun main() = runBlocking {
         deferred.await()
 
     }
+
     val costTime = (System.currentTimeMillis() - startTime)/1000
-    println("costTime-->$costTime")
+    log("costTime-->$costTime")
+    log("user -> $resultAvatar")
 }
 
 
@@ -72,7 +74,9 @@ suspend fun getUserAsync2(userId: Int): User = suspendCoroutine{
 }
 
 
-
+/**
+ * 异步同步化
+ */
 suspend fun getUserAvatarAsync2(user: User): User = suspendCoroutine {
         continuation->
     HttpManager.getUserAvatar(user){

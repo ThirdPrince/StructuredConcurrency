@@ -13,6 +13,11 @@ import java.util.concurrent.Executors;
 public class HttpUtils {
     static ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()*2);
 
+    /**
+     * getUser
+     * @param userId
+     * @param userCallback
+     */
     public static  void getUser(int userId,UserCallback userCallback){
         executorService.execute(() -> {
            long  sleepTime  = new Random().nextInt(500);
@@ -26,6 +31,12 @@ public class HttpUtils {
 
     }
 
+    /**
+     * getAvatar
+     * @param user
+     * @param userCallback
+     * @throws InterruptedException
+     */
     public static void getUserAvatar(User user,UserCallback userCallback) throws InterruptedException {
 
         executorService.execute(()->{

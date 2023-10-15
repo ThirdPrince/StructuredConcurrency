@@ -18,7 +18,7 @@ fun main() = runBlocking {
 
     val startTime = System.currentTimeMillis()
     val userIds: MutableList<Int> = ArrayList()
-    for (i in 1..1000) {
+    for (i in 1..100) {
         userIds.add(i)
     }
     var count = userIds.size
@@ -31,6 +31,7 @@ fun main() = runBlocking {
             map
         }
     }
+
 
 
     // 获取每个 async 任务的结果

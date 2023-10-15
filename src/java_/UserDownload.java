@@ -26,7 +26,7 @@ public class UserDownload {
 
         long  startTime = System.currentTimeMillis();
         List<Integer> userId = new ArrayList<>();
-        for (int i = 1; i <= 1000; i++) {
+        for (int i = 1; i <= 100; i++) {
             userId.add(i);
         }
         Map<Integer,User> map = new ConcurrentHashMap<>();

@@ -1,16 +1,10 @@
 package java_;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-import kotlin.reflect.KVariance;
-import kt.HttpManager;
 import kt.User;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static utils.LogKt.log;
@@ -34,7 +28,7 @@ public class UserDownload {
         AtomicInteger atomicInteger  = new AtomicInteger(userId.size());
         CountDownLatch countDownLatch = new CountDownLatch(userId.size());
         for (Integer id : userId) {
-            HttpUtils.getUser(id, user -> {
+            ClientUtils.getUser(id, user -> {
                 log("atomicInteger-->"+  atomicInteger.decrementAndGet());
                 map.put(id,user);
                 countDownLatch.countDown();
@@ -49,7 +43,7 @@ public class UserDownload {
         CountDownLatch countDownLatchDownload= new CountDownLatch(userId.size());
         log("map size-->"+map.size());
         for (User user : map.values()){
-            HttpUtils.getUserAvatar(user, new UserCallback() {
+            ClientUtils.getUserAvatar(user, new UserCallback() {
                 @Override
                 public void onCallback(User user) {
                     log("atomicIntegerAvatar-->"+  atomicIntegerAvatar.decrementAndGet());

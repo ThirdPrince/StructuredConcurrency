@@ -2,8 +2,6 @@ package kt
 
 import kotlinx.coroutines.*
 import utils.log
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -57,7 +55,7 @@ fun main() = runBlocking {
 
     }
 
-    val costTime = (System.currentTimeMillis() - startTime)/1000
+    val costTime = (System.currentTimeMillis() - startTime) / 1000
     log("costTime-->$costTime")
     log("user -> $resultAvatar")
 }
@@ -66,9 +64,8 @@ fun main() = runBlocking {
 /**
  * 异步同步化
  */
-suspend fun getUserAsync2(userId: Int): User = suspendCoroutine{
-    continuation->
-    HttpManager.getUser(userId){
+suspend fun getUserAsync2(userId: Int): User = suspendCoroutine { continuation ->
+    ClientManager.getUser(userId) {
         continuation.resume(it)
     }
 }
@@ -77,9 +74,8 @@ suspend fun getUserAsync2(userId: Int): User = suspendCoroutine{
 /**
  * 异步同步化
  */
-suspend fun getUserAvatarAsync2(user: User): User = suspendCoroutine {
-        continuation->
-    HttpManager.getUserAvatar(user){
+suspend fun getUserAvatarAsync2(user: User): User = suspendCoroutine { continuation ->
+    ClientManager.getUserAvatar(user) {
         continuation.resume(it)
     }
 }

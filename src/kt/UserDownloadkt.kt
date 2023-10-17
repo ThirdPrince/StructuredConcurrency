@@ -2,10 +2,6 @@ package kt
 
 import kotlinx.coroutines.*
 import utils.log
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.Executors
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 /**
@@ -65,7 +61,7 @@ fun main() = runBlocking {
 /**
  * 异步同步化
  */
-suspend fun getUserAsync(userId: Int): User = withContext(HttpManager.customDispatchers){
+suspend fun getUserAsync(userId: Int): User = withContext(ClientManager.customDispatchers){
     val sleepTime = java.util.Random().nextInt(500)
     log("getUserAsync sleepTime -->$sleepTime")
     delay(sleepTime.toLong())
@@ -74,7 +70,7 @@ suspend fun getUserAsync(userId: Int): User = withContext(HttpManager.customDisp
 
 
 
-suspend fun getUserAvatarAsync(user: User): User = withContext(HttpManager.customDispatchers) {
+suspend fun getUserAvatarAsync(user: User): User = withContext(ClientManager.customDispatchers) {
     val sleepTime = java.util.Random().nextInt(1000)
     log("getUserAvatarAsync sleepTime -->$sleepTime")
     delay(sleepTime.toLong())

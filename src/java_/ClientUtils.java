@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
  * 模拟网络请求
  * Java 版本
  */
-public class HttpUtils {
+public class ClientUtils {
     static ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()*2);
 
     /**
@@ -37,7 +37,7 @@ public class HttpUtils {
      * @param userCallback
      * @throws InterruptedException
      */
-    public static void getUserAvatar(User user,UserCallback userCallback) throws InterruptedException {
+    public static void getUserAvatar(User user,UserCallback userCallback)  {
 
         executorService.execute(()->{
             int sleepTime = new Random().nextInt(1000);

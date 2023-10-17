@@ -1,5 +1,5 @@
 
-# 并发编程：Kotlin 协程 vs Java Executor
+# 并发编程：Kotlin Coroutines vs Java concurrency
 ## Kotlin 协程
 Kotlin 协程提供了更为现代和富有表达力的异步编程和并发任务处理方式。以下是一些亮点：
 
@@ -7,7 +7,7 @@ Kotlin 协程提供了更为现代和富有表达力的异步编程和并发任�
 - 自动的线程管理：协程自动管理线程池和调度，减少了手动线程处理的需求。
 - 结构化并发：协程提倡结构化并发，其中协程的作用域定义了其生命周期和取消行为。
 - 异常处理：异常处理方式直观，类似于常规的同步代码，使用 try-catch 块。
-- 
+
 <img src="image/01.png" height="480">
 
 

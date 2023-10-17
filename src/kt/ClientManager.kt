@@ -6,9 +6,9 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 /**
- * 模拟http 请求
+ * 模拟客户端请求 请求
  */
-object HttpManager {
+object ClientManager {
 
     var executor: Executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2)
     val customDispatchers = executor.asCoroutineDispatcher()

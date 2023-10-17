@@ -8,7 +8,7 @@ Kotlin 协程提供了更为现代和富有表达力的异步编程和并发任�
 - 结构化并发：协程提倡结构化并发，其中协程的作用域定义了其生命周期和取消行为。
 - 异常处理：异常处理方式直观，类似于常规的同步代码，使用 try-catch 块。
 - 
-<img src="screenshots/01.png" height="480">
+<img src="image/01.png" height="480">
 
 
 ## Java Executor
@@ -20,7 +20,7 @@ Java Executor 框架是使用线程池管理并发任务的传统方式，主要
 更多的控制：Java Executor 提供了更细粒度的线程池大小和任务提交控制。
 
 
-<img src="screenshots/02.png" height="480">
+<img src="image/02.png" height="480">
 
 
 
